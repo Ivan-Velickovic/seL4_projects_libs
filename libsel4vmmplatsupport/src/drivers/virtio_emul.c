@@ -123,6 +123,12 @@ virtio_emul_t *virtio_emul_init(ps_io_ops_t io_ops, int queue_size, vm_t *vm, vo
     case VIRTIO_NET:
         emul->internal = net_virtio_emul_init(emul, io_ops, (ethif_driver_init)driver, config);
         break;
+    case VIRTIO_VSOCK:
+        emul->internal = vsock_virtio_emul_init(emul, io_ops, (vsock_driver_init)driver, config);
+        // @ivanv: Set up control queue, need to clean this up properly though.
+        emul->virtq.queue_size[CONTROL_QUEUE] = queue_size;
+        vring_init(&emul->virtq.vring[CONTROL_QUEUE], emul->virtq.queue_size[CONTROL_QUEUE], 0, VIRTIO_PCI_VRING_ALIGN);
+        break;
     }
     if (emul->internal == NULL) {
         return NULL;

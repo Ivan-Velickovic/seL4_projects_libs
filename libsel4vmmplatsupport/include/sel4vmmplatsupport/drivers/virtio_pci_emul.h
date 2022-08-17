@@ -11,27 +11,33 @@
 #include <platsupport/io.h>
 #include <ethdrivers/raw.h>
 #include <sel4vmmplatsupport/drivers/virtio_pci_console.h>
+#include <sel4vmmplatsupport/drivers/virtio_pci_vsock.h>
 #include <sel4vm/guest_vm.h>
 #include <ethdrivers/virtio/virtio_ring.h>
 #include <ethdrivers/virtio/virtio_pci.h>
 #include <ethdrivers/virtio/virtio_net.h>
+#include <ethdrivers/virtio/virtio_vsock.h>
 #include <ethdrivers/virtio/virtio_config.h>
 
 #define RX_QUEUE 0
 #define TX_QUEUE 1
+#define CONTROL_QUEUE 2
+
+#define NUM_VQUEUES 3
 
 typedef enum virtio_pci_devices {
     VIRTIO_NET,
     VIRTIO_CONSOLE,
+    VIRTIO_VSOCK,
 } virtio_pci_devices_t;
 
 typedef struct v_queue {
     int status;
     uint16_t queue;
-    struct vring vring[2];
-    uint16_t queue_size[2];
-    uint32_t queue_pfn[2];
-    uint16_t last_idx[2];
+    struct vring vring[NUM_VQUEUES];
+    uint16_t queue_size[NUM_VQUEUES];
+    uint32_t queue_pfn[NUM_VQUEUES];
+    uint16_t last_idx[NUM_VQUEUES];
 } vqueue_t;
 
 typedef struct virtio_emul {
@@ -66,3 +72,5 @@ uint16_t ring_avail(virtio_emul_t *emul, struct vring *vring, uint16_t idx);
 void *net_virtio_emul_init(virtio_emul_t *emul, ps_io_ops_t io_ops, ethif_driver_init driver, void *config);
 
 void *console_virtio_emul_init(virtio_emul_t *emul, ps_io_ops_t io_ops, console_driver_init driver, void *config);
+
+void *vsock_virtio_emul_init(virtio_emul_t *emul, ps_io_ops_t io_ops, vsock_driver_init driver, void *config);
