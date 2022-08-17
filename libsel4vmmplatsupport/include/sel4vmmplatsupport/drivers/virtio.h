@@ -17,11 +17,19 @@
 /* Virtio device IDs  */
 #define VIRTIO_NET_PCI_DEVICE_ID        0x1000
 #define VIRTIO_CONSOLE_PCI_DEVICE_ID    0x1003
+/* @ivanv: document where this came from check that it is correct */
+#define VIRTIO_VSOCK_PCI_DEVICE_ID      0x1012
 
 /* Virtio subsystem device ids */
+// @ivanv: document where these came from too
 #define VIRTIO_ID_NET                   1
 #define VIRTIO_ID_CONSOLE               3
+#define VIRTIO_ID_VSOCK                 19
 
-/* Virtio PCI device classes  */
+/* Virtio PCI device classes, source: https://pci-ids.ucw.cz/read/PD/ */
+/* Device class 02 (network controller), subclass 00 (ethernet controller) */
 #define VIRTIO_PCI_CLASS_NET            0x020000
+/* Device class 07 (communication controller), subclass 80 (communication controller) */
 #define VIRTIO_PCI_CLASS_CONSOLE        0x078000
+/* Device class 07 (communication controller), subclass 80 (communication controller) */
+#define VIRTIO_PCI_CLASS_VSOCK          0x078000
